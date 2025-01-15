@@ -1,0 +1,63 @@
+import requests
+import matplotlib.pyplot as plt
+import seaborn as sns
+import datetime
+
+# Replace with your OpenWeatherMap API key
+API_KEY = "67d2be82b67d84689279f3e6e846bae0"
+CITY = "London"
+URL = f"http://api.openweathermap.org/data/2.5/forecast?q={CITY}&appid={API_KEY}&units=metric"
+
+# Fetch weather data
+response = requests.get(URL)
+if response.status_code == 200:
+    data = response.json()
+else:
+    print(f"Error fetching data: {response.status_code}")
+    exit()
+
+# Extract relevant data
+dates = []
+temperatures = []
+humidity = []
+weather_descriptions = []
+
+for entry in data['list']:
+    dates.append(datetime.datetime.strptime(entry['dt_txt'], "%Y-%m-%d %H:%M:%S"))
+    temperatures.append(entry['main']['temp'])
+    humidity.append(entry['main']['humidity'])
+    weather_descriptions.append(entry['weather'][0]['description'])
+
+# Create visualizations
+sns.set(style="darkgrid")
+
+# Temperature vs Time
+plt.figure(figsize=(10, 5))
+plt.plot(dates, temperatures, marker="o", label="Temperature (°C)")
+plt.title(f"Temperature Forecast for {CITY}")
+plt.xlabel("Date and Time")
+plt.ylabel("Temperature (°C)")
+plt.xticks(rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Humidity vs Time
+plt.figure(figsize=(10, 5))
+plt.plot(dates, humidity, marker="s", color="orange", label="Humidity (%)")
+plt.title(f"Humidity Forecast for {CITY}")
+plt.xlabel("Date and Time")
+plt.ylabel("Humidity (%)")
+plt.xticks(rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Temperature Distribution
+plt.figure(figsize=(8, 5))
+sns.histplot(temperatures, kde=True, bins=15, color="blue")
+plt.title(f"Temperature Distribution for {CITY}")
+plt.xlabel("Temperature (°C)")
+plt.ylabel("Frequency")
+plt.tight_layout()
+plt.show()
