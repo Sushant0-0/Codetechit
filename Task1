@@ -4,7 +4,7 @@ import seaborn as sns
 import datetime
 
 # Replace with your OpenWeatherMap API key
-API_KEY = "67d2be82b67d84689279f3e6e846bae0"
+API_KEY = "2412aa7c770c725bbde968b8280b3dc3"
 CITY = "London"
 URL = f"http://api.openweathermap.org/data/2.5/forecast?q={CITY}&appid={API_KEY}&units=metric"
 
